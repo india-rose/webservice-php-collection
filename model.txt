@@ -44,3 +44,4 @@ Future evolve, be able to allow some indiagrams only on some device
 
 Future possibility : 
 	- add an enable/disable boolean for some indiagram
+	- restrict access to some indiagrams with time window 
