@@ -41,3 +41,6 @@ Future evolve, be able to allow some indiagrams only on some device
 	- id
 	- device_id
 	- indiagram_id
+
+Future possibility : 
+	- add an enable/disable boolean for some indiagram
