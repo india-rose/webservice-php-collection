@@ -2,6 +2,7 @@
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
+use App\Http\Controllers\Helpers\ResponseHelper;
 use App\User;
 
 use Response;
@@ -11,6 +12,10 @@ use Hash;
 
 class UserController extends Controller 
 {
+	const ERROR_CODE_MISSING_FIELDS = 100;
+	const ERROR_CODE_USERNAME_EXISTS = 101;
+	const ERROR_CODE_EMAIL_EXISTS = 102;
+	
 	public function store()
 	{
 		if(Request::has('username') && Request::has('email') && Request::has('password'))
@@ -31,14 +36,7 @@ class UserController extends Controller
 				'email' => Request::input('email')
 			]);
 			
-			return Response::json([
-				'error' => false,
-				'user' => [
-					'id' => $user->id,
-					'email' => $user->email,
-					'username' => $user->username
-					]
-			], 201);
+			return ResponseHelper::created($user);
 		}
 		else
 		{
@@ -49,16 +47,7 @@ class UserController extends Controller
 	public function show()
 	{
 		$user = Auth::user();
-		return Response::json([
-			'error' => false,
-			'user' => [
-				'id' => $user->id,
-				'email' => $user->email,
-				'username' => $user->username,
-				]
-			],
-			200
-		);
+		return ResponseHelper::processed($user);
 	}
 
 	public function update()
@@ -88,14 +77,7 @@ class UserController extends Controller
 		}
 		$user->save();
 		
-		return Response::json([
-			'error' => false,
-			'user' => [
-				'id' => $user->id,
-				'email' => $user->email,
-				'username' => $user->username
-				]
-		], 200);
+		return ResponseHelper::processed($user);
 	}
 
 	public function destroy()
@@ -103,9 +85,7 @@ class UserController extends Controller
 		$user = Auth::user();
 		$user->delete();
 		
-		return Response::json([
-			'error' => false,
-		], 200);
+		return ResponseHelper::processed(null);
 	}
 
 	private function usernameExists($username)
@@ -128,28 +108,16 @@ class UserController extends Controller
 
 	private function getResponseUsernameExists()
 	{
-		return Response::json([
-			'error' => true,
-			'errorCode' => 101,
-			'message' => 'Username already exists',
-		], 400);
+		return ResponseHelper::error(self::ERROR_CODE_USERNAME_EXISTS, 'Username already exists');
 	}
 	
 	private function getResponseEmailExists()
 	{
-		return Response::json([
-			'error' => true,
-			'errorCode' => 102,
-			'message' => 'Email already exists',
-		], 400);
+		return ResponseHelper::error(self::ERROR_CODE_EMAIL_EXISTS, 'Email already exists');
 	}
 
 	private function getResponseMissingFields()
 	{
-		return Response::json([
-			'error' => true,
-			'errorCode' => 100,
-			'message' => 'Missing fields in request',
-		], 400);
+		return ResponseHelper::error(self::ERROR_CODE_MISSING_FIELDS, 'Missing fields in request');
 	}
 }

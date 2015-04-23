@@ -11,4 +11,12 @@ class User extends Model implements AuthenticatableContract
 	protected $table = 'users';
 	
 	protected $guarded = ['id'];
+	
+	public function toJsonArray()
+	{
+		return [
+			'username' => $this->username,
+			'email' => $this->email,
+		];
+	}
 }
