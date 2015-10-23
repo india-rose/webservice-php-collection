@@ -1,0 +1,47 @@
+Data model for india rose webservice
+
++ Users
+	- id
+	- username
+	- password
+	- email
+	
++ Settings
+	- id
+	- user_id
+	- version
+	- content
+	
++ Indiagrams
+	- id
+	- user_id
+	
++ Versions
+	- id
+	- indiagram_id
+	- version
+	- text
+	- image
+	- sound
+	- is_category
+	
++ VersionList
+	- id
+	- user_id
+	- version
+	
+Future evolve, be able to allow some indiagrams only on some device 
+
++ Devices
+	- id
+	- user_id
+	- name
+
++ DeviceAccess
+	- id
+	- device_id
+	- indiagram_id
+
+Future possibility : 
+	- add an enable/disable boolean for some indiagram
+	- restrict access to some indiagrams with time window 
